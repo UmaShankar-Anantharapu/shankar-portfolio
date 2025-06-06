@@ -1,0 +1,168 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Angular Material Theme */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+/* CSS Custom Properties for Theme */
+:root {
+  --primary-color: #1A1A1A;
+  --primary-color-dark: #2C3E50;
+  --secondary-color: #26A69A;
+  --text-color: #ffffff;
+  --text-color-secondary: #e0e0e0;
+  --background-gradient: linear-gradient(135deg, #1A1A1A 0%, #2C3E50 100%);
+  --navbar-background: rgba(26, 26, 26, 0.95);
+  --navbar-text-color: #ffffff;
+  --button-text-color: #ffffff;
+}
+
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
+  color: var(--text-color);
+  min-height: 100vh;
+}
+
+html, body {
+  height: 100%;
+}
+
+/* Modal Styles */
+.technology-modal .mat-mdc-dialog-container {
+  background: var(--primary-color);
+  color: var(--text-color);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.technology-modal .mat-mdc-dialog-title {
+  color: var(--secondary-color);
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+}
+
+/* Enhanced Cube Tooltip with Premium Styling */
+#cube-tooltip {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, var(--primary-color) 0%, rgba(26, 26, 26, 0.95) 100%) !important;
+  color: var(--text-color) !important;
+  border: 2px solid var(--secondary-color) !important;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(38, 166, 154, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(20px);
+  border-radius: 16px !important;
+  padding: 20px 24px !important;
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  max-width: 380px !important;
+  z-index: 10000 !important;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  transform: translateY(-10px) scale(0.95);
+  opacity: 0;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  /* Enhanced title styling with premium effects */
+  .tooltip-title {
+    font-family: 'Orbitron', sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 800 !important;
+    color: var(--secondary-color) !important;
+    margin-bottom: 16px !important;
+    text-shadow:
+      0 0 16px rgba(38, 166, 154, 0.8),
+      0 0 32px rgba(38, 166, 154, 0.4),
+      0 2px 4px rgba(0, 0, 0, 0.8) !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    display: block !important;
+    background: linear-gradient(135deg, var(--secondary-color) 0%, rgba(38, 166, 154, 0.7) 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    position: relative !important;
+  }
+
+  /* Enhanced description styling */
+  .tooltip-description {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 15px !important;
+    color: var(--text-color) !important;
+    line-height: 1.6 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    display: block !important;
+  }
+
+  /* Smooth entrance animation */
+  &:not(.visible) {
+    pointer-events: none;
+  }
+}
+
+/* Cube interaction cursor states */
+.cube-container canvas {
+  transition: cursor 0.2s ease !important;
+
+  &.dragging {
+    cursor: grabbing !important;
+  }
+
+  &.hovering {
+    cursor: grab !important;
+  }
+}
+
+/* Animation Classes */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.6s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.bounce-in {
+  opacity: 0;
+  transform: scale(0.3);
+  animation: bounceIn 0.6s ease-out forwards;
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

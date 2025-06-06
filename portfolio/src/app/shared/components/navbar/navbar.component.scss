@@ -1,0 +1,279 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--navbar-background);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--secondary-color);
+  padding: 1rem 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  // Enhanced shadow for better depth perception
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+
+  // Fallback for browsers that don't support CSS custom properties
+  @supports not (color: var(--navbar-background)) {
+    background: rgba(26, 26, 26, 0.95);
+  }
+
+  // Smooth theme transition
+  * {
+    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  // Theme-specific enhancements
+  &[data-theme="light"] {
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+    border-bottom-color: rgba(38, 166, 154, 0.3);
+  }
+
+  &[data-theme="dark"] {
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+    border-bottom-color: var(--secondary-color);
+  }
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.nav-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.usa-logo {
+  font-family: 'Orbitron', sans-serif;
+  color: var(--secondary-color);
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px rgba(38, 166, 154, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    text-shadow: 0 0 20px rgba(38, 166, 154, 0.6);
+    transform: scale(1.05);
+  }
+}
+
+.logo-subtitle {
+  font-family: 'Inter', sans-serif;
+  color: var(--navbar-text-color, var(--text-color-secondary));
+  font-size: 0.75rem;
+  font-weight: 400;
+  margin-top: -2px;
+  opacity: 0.8;
+  letter-spacing: 0.05em;
+  transition: color 0.3s ease;
+
+  // Enhanced contrast for light theme
+  .navbar[data-theme="light"] & {
+    opacity: 0.7;
+    color: var(--text-color-secondary);
+  }
+
+  .navbar[data-theme="dark"] & {
+    opacity: 0.8;
+    color: var(--text-color-secondary);
+  }
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-link {
+  color: var(--navbar-text-color, var(--text-color));
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+
+  &:hover {
+    color: var(--secondary-color);
+    text-shadow: 0 0 8px rgba(38, 166, 154, 0.3);
+  }
+
+  &.active {
+    color: var(--secondary-color);
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--secondary-color);
+      border-radius: 1px;
+      box-shadow: 0 0 8px rgba(38, 166, 154, 0.4);
+    }
+  }
+}
+
+.hire-me-btn {
+  background: var(--secondary-color);
+  color: var(--button-text-color, white);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(38, 166, 154, 0.2);
+
+  &:hover {
+    background: #1e8a7a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(38, 166, 154, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.theme-toggle-btn {
+  background: rgba(38, 166, 154, 0.1);
+  border: 2px solid var(--secondary-color);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 1rem;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(5px);
+
+  &:hover {
+    background-color: var(--secondary-color);
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(38, 166, 154, 0.4);
+    border-color: var(--secondary-color);
+
+    .theme-icon {
+      color: var(--button-text-color, white);
+      transform: rotate(180deg);
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(38, 166, 154, 0.3);
+  }
+
+  // Theme-specific styling
+  &[data-theme="light"] {
+    background: rgba(38, 166, 154, 0.15);
+    border-color: var(--secondary-color);
+  }
+
+  &[data-theme="dark"] {
+    background: rgba(38, 166, 154, 0.1);
+    border-color: var(--secondary-color);
+  }
+}
+
+.theme-icon {
+  color: var(--secondary-color);
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 0 2px rgba(38, 166, 154, 0.3));
+
+  // Ensure proper contrast in both themes
+  .theme-toggle-btn[data-theme="light"] & {
+    color: var(--secondary-color);
+  }
+
+  .theme-toggle-btn[data-theme="dark"] & {
+    color: var(--secondary-color);
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-container {
+    padding: 0 1rem;
+  }
+
+  .usa-logo {
+    font-size: 1.5rem;
+  }
+
+  .logo-subtitle {
+    font-size: 0.65rem;
+  }
+
+  .nav-menu {
+    gap: 0.75rem;
+  }
+
+  .nav-link {
+    font-size: 0.9rem;
+  }
+
+  .hire-me-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .theme-toggle-btn {
+    width: 40px;
+    height: 40px;
+    margin-left: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-container {
+    padding: 0 0.5rem;
+  }
+
+  .usa-logo {
+    font-size: 1.25rem;
+  }
+
+  .logo-subtitle {
+    display: none;
+  }
+
+  .nav-menu {
+    gap: 0.5rem;
+  }
+
+  .nav-link {
+    font-size: 0.8rem;
+  }
+
+  .hire-me-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .theme-toggle-btn {
+    width: 36px;
+    height: 36px;
+    margin-left: 0.25rem;
+  }
+}

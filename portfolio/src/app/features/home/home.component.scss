@@ -1,0 +1,515 @@
+// Hero Section - Modern Layout
+.hero-section {
+  @apply min-h-screen flex items-center justify-center;
+  background: var(--background-gradient);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+
+  // Subtle background pattern
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 80%, rgba(38, 166, 154, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(38, 166, 154, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+}
+
+.hero-content {
+  @apply w-full max-w-7xl mx-auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 6rem;
+  position: relative;
+  z-index: 1;
+}
+
+// Left Side - Text Content (Top-aligned)
+.hero-text {
+  @apply text-left;
+  z-index: 2;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 2rem;
+}
+
+.hero-greeting {
+  margin-bottom: 1.5rem;
+
+  .greeting-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    line-height: 1.2;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, var(--text-color) 0%, var(--secondary-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+// Enhanced Typewriter Effect
+.tagline-container {
+  margin-bottom: 3rem;
+}
+
+.hero-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--text-color-secondary);
+  line-height: 1.6;
+  min-height: 3em; // Prevent layout shift during typewriter
+  margin: 0;
+
+  .typewriter-text {
+    display: inline;
+    transition: all 0.1s ease;
+  }
+
+  .cursor {
+    display: inline-block;
+    color: var(--secondary-color);
+    font-weight: 700;
+    margin-left: 2px;
+    font-size: 1.3em;
+  }
+}
+
+// Large Three.js Cube with Face Labels
+.cube-container {
+  width: 350px;
+  height: 350px;
+  margin-top: 2rem;
+  position: relative;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+
+  canvas {
+    background: transparent !important;
+    border: none;
+    border-radius: 0;
+    transition: all 0.3s ease;
+
+    // Ensure text rendering is crisp
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    text-rendering: optimizeLegibility;
+  }
+
+  &:hover canvas {
+    transform: scale(1.05);
+
+    // Enhance glow effect on hover
+    filter: drop-shadow(0 0 20px rgba(38, 166, 154, 0.3));
+  }
+
+  // Add subtle ambient glow around the cube
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(
+      circle,
+      rgba(38, 166, 154, 0.1) 0%,
+      rgba(38, 166, 154, 0.05) 30%,
+      transparent 70%
+    );
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
+}
+
+
+
+// Right Side - Visual Profile
+.hero-visual {
+  @apply flex justify-center items-center;
+  z-index: 3;
+  position: relative;
+
+  // TEMPORARY: Add a test pattern to verify transparency
+  // Remove this after confirming transparency works
+  // background:
+  //   radial-gradient(circle at 20% 20%, rgba(255, 0, 0, 0.1) 0%, transparent 50%),
+  //   radial-gradient(circle at 80% 80%, rgba(0, 255, 0, 0.1) 0%, transparent 50%),
+  //   radial-gradient(circle at 50% 50%, rgba(0, 0, 255, 0.1) 0%, transparent 50%);
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+.profile-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // CRITICAL: Ensure container has no background
+  background: none !important;
+  background-color: transparent !important;
+}
+
+.profile-image {
+  position: relative;
+  width: 400px;
+  height: 90vh;
+  // COMPLETE transparency - no background, borders, or shadows on container
+  background: none !important;
+  border: none !important;
+  border-radius: 0;
+  overflow: visible;
+  box-shadow: none !important;
+  transition: transform 0.5s ease;
+
+  // Remove ALL pseudo-elements that could create backgrounds
+  &::before,
+  &::after {
+    display: none !important;
+  }
+
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+.profile-img {
+  width: 100%;
+  height: 100%;
+  // CRITICAL: Use object-fit: contain to preserve transparency and aspect ratio
+  object-fit: contain;
+  // CRITICAL: No background whatsoever
+  background: none !important;
+  background-color: transparent !important;
+  // CRITICAL: No borders or outlines
+  border: none !important;
+  outline: none !important;
+  // CRITICAL: No filters that could add backgrounds
+  filter: none !important;
+  // CRITICAL: No box shadows
+  box-shadow: none !important;
+  // Smooth transition
+  transition: transform 0.3s ease;
+  // High quality rendering
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+
+  &.loaded {
+    // Only add subtle drop shadow to the figure itself, not background
+    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.15)) !important;
+  }
+
+  .profile-image:hover & {
+    transform: scale(1.01);
+    // Enhanced drop shadow on hover - only affects the figure
+    filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.2)) !important;
+  }
+
+  // Ensure no background in any browser
+  @supports not (object-fit: contain) {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    background: none !important;
+  }
+}
+
+// Floating Elements
+.floating-element {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--secondary-color);
+  border-radius: 50%;
+  opacity: 0.6;
+  box-shadow: 0 0 10px rgba(38, 166, 154, 0.5);
+
+  &.floating-1 {
+    top: 20%;
+    left: -20px;
+    width: 6px;
+    height: 6px;
+  }
+
+  &.floating-2 {
+    top: 60%;
+    right: -15px;
+    width: 10px;
+    height: 10px;
+  }
+
+  &.floating-3 {
+    bottom: 30%;
+    left: -25px;
+    width: 4px;
+    height: 4px;
+  }
+}
+
+// Social Media Overlay
+.social-overlay {
+  position: absolute;
+  right: -60px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+}
+
+.social-icons {
+  position: relative;
+  width: 150px;
+  height: 280px;
+}
+
+.social-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 48px;
+  height: 48px;
+  margin-left: -24px;
+  margin-top: -24px;
+  background: rgba(38, 166, 154, 0.1);
+  border: 2px solid var(--secondary-color);
+  border-radius: 50%;
+  color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  text-decoration: none;
+
+  &:hover {
+    background: var(--secondary-color);
+    color: white;
+    transform: scale(1.2);
+    box-shadow: 0 8px 25px rgba(38, 166, 154, 0.4);
+    border-color: white;
+
+    svg {
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    }
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+    transition: all 0.3s ease;
+  }
+}
+
+// Responsive Design
+@media (max-width: 1200px) {
+  .hero-content {
+    gap: 4rem;
+  }
+
+  .profile-image {
+    width: 350px;
+    height: 70vh;
+  }
+
+  .social-overlay {
+    right: -40px;
+  }
+
+  .social-icons {
+    width: 240px;
+    height: 240px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    text-align: center;
+  }
+
+  .hero-text {
+    @apply text-center;
+    order: 2;
+    max-width: 100%;
+    align-items: center;
+    padding-top: 1rem;
+  }
+
+  .hero-visual {
+    order: 1;
+  }
+
+  .hero-greeting .greeting-title {
+    font-size: 2.25rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.125rem;
+  }
+
+  .profile-image {
+    width: 300px;
+    height: 70vh;
+  }
+
+  .social-overlay {
+    position: static;
+    transform: none;
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .social-icons {
+    width: 340px;
+    height: 170px;
+  }
+
+  .cube-container {
+    width: 280px;
+    height: 280px;
+    margin: 2rem auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 1rem;
+  }
+
+  .hero-content {
+    gap: 3rem;
+  }
+
+  .hero-text {
+    padding-top: 0.5rem;
+  }
+
+  .hero-greeting .greeting-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .profile-image {
+    width: 280px;
+    height: 70vh;
+  }
+
+  .social-icons {
+    width: 290px;
+    height: 140px;
+  }
+
+  .social-icon {
+    width: 40px;
+    height: 40px;
+    margin-left: -20px;
+    margin-top: -20px;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .cube-container {
+    width: 240px;
+    height: 240px;
+    margin: 1.5rem auto;
+  }
+
+  .floating-element {
+    display: none; // Hide floating elements on mobile
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section {
+    padding: 0.5rem;
+  }
+
+  .hero-content {
+    gap: 2rem;
+  }
+
+  .hero-text {
+    padding-top: 0;
+  }
+
+  .hero-greeting .greeting-title {
+    font-size: 1.75rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .profile-image {
+    width: 240px;
+    height: 70vh;
+  }
+
+  .social-icons {
+    width: 240px;
+    height: 120px;
+  }
+
+  .social-icon {
+    width: 36px;
+    height: 36px;
+    margin-left: -18px;
+    margin-top: -18px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .cube-container {
+    width: 200px;
+    height: 200px;
+    margin: 1rem auto;
+  }
+}
+
+// Performance optimizations
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .cursor {
+    animation: none;
+    opacity: 1;
+  }
+
+  .floating-element {
+    display: none;
+  }
+}

@@ -1,0 +1,40 @@
+<section id="projects" class="projects-section" role="main" aria-labelledby="projects-title">
+  <div class="container">
+    <!-- Projects Heading -->
+    <header class="projects-header">
+      <h1 id="projects-title" class="projects-title">My Projects</h1>
+      <p class="projects-subtitle">
+        A showcase of innovative applications and solutions I've developed across different technologies and domains.
+      </p>
+    </header>
+
+    <!-- Bento Grid Layout with Performance-Optimized Project Cards -->
+    <div #bentoGrid class="bento-grid" role="region" aria-label="Projects showcase">
+      <app-project-card
+        *ngFor="let project of projects; trackBy: trackByProjectId"
+        [project]="project"
+        [gridSizeClass]="getGridSizeClass(project)"
+        (viewDetails)="onViewDetails($event)"
+        (skillNavigation)="onSkillNavigation($event)">
+      </app-project-card>
+    </div>
+
+    <!-- Projects Summary -->
+    <footer class="projects-summary">
+      <div class="summary-stats">
+        <div class="stat-item">
+          <span class="stat-number">{{ projects.length }}</span>
+          <span class="stat-label">Total Projects</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ getFeaturedProjectsCount() }}</span>
+          <span class="stat-label">Featured Projects</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <span class="stat-label">Companies</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+</section>

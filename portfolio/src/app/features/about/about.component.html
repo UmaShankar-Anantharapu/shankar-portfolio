@@ -1,0 +1,143 @@
+<section id="about" class="about-section" role="main" aria-labelledby="about-title">
+  <div class="container">
+    <!-- About Heading -->
+    <header class="about-header">
+      <h1 id="about-title" class="about-title">About Me</h1>
+    </header>
+
+    <!-- Stats Cards -->
+    <div class="stats-container" #statsContainer role="region" aria-label="Professional statistics">
+      <div class="stats-grid">
+        <div
+          *ngFor="let stat of stats; let i = index; trackBy: trackByStatIndex"
+          class="stat-card"
+          [class.clickable]="stat.clickable"
+          [style.animation-delay]="(i * 0.2) + 's'"
+          (click)="onStatCardClick(stat)"
+          [attr.aria-label]="stat.clickable ? 'Click to view ' + stat.label.toLowerCase() : stat.number + ' ' + stat.label"
+          [attr.role]="stat.clickable ? 'button' : null"
+          [attr.tabindex]="stat.clickable ? '0' : null">
+          <div class="stat-icon" aria-hidden="true">{{ stat.icon }}</div>
+          <div class="stat-number" [attr.aria-label]="stat.number">{{ stat.number }}</div>
+          <div class="stat-label">{{ stat.label }}</div>
+          <div *ngIf="stat.clickable" class="click-indicator" aria-hidden="true">
+            <span class="click-text">Click to explore</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- About Content -->
+    <div class="about-content">
+      <div class="about-text" #aboutText role="region" aria-label="About me content">
+        <!-- Voice Narration Button -->
+        <div class="voice-controls">
+          <button
+            #voiceButton
+            type="button"
+            class="voice-button"
+            (click)="toggleVoiceNarration()"
+            [class.active]="isNarrating"
+            [attr.aria-label]="isNarrating ? 'Stop voice narration' : 'Start voice narration'"
+            [attr.aria-pressed]="isNarrating">
+            <span class="voice-icon" aria-hidden="true">{{ isNarrating ? '🔊' : '🎤' }}</span>
+            <span class="voice-text">{{ isNarrating ? 'Stop Narration' : 'Listen to About' }}</span>
+          </button>
+        </div>
+
+        <p class="about-paragraph">
+          I'm a Software Engineer with 6 years of experience in Angular frontend development,
+          specializing in Micro Frontend architecture. Throughout my career, I've had the
+          opportunity to work with cutting-edge technologies and contribute to innovative
+          projects that have shaped my expertise in modern web development.
+        </p>
+
+        <p class="about-paragraph">
+          My journey in software development has been driven by a passion for creating
+          efficient, scalable, and user-friendly applications. I have extensive experience
+          in building complex enterprise applications using Angular, RxJS, and various
+          visualization libraries like Highcharts and AG-Grid.
+        </p>
+
+        <p class="about-paragraph">
+          I specialize in Micro Frontend architecture, which allows for better scalability,
+          maintainability, and team collaboration. My experience includes developing projects
+          like Celeste and IOT Dashboard, where I've implemented advanced features such as
+          real-time data visualization, interactive dashboards, and performance optimization.
+        </p>
+      </div>
+
+      <!-- Work Experience Timeline -->
+      <div class="timeline-section" #timelineContainer role="region" aria-labelledby="timeline-title">
+        <h3 id="timeline-title" class="timeline-title">Professional Journey</h3>
+        <div class="timeline-container">
+          <mat-stepper
+            orientation="vertical"
+            class="experience-stepper"
+            [linear]="false"
+            [animationDuration]="'300ms'">
+
+            <mat-step
+              *ngFor="let experience of workExperience; let i = index; trackBy: trackByWorkExperience"
+              [completed]="true"
+              class="timeline-step">
+
+              <ng-template matStepLabel>
+                <div class="step-label">
+                  <span class="company-icon">{{ experience.icon }}</span>
+                  <div class="company-info">
+                    <h4 class="company-name">{{ experience.company }}</h4>
+                    <span class="company-duration">{{ experience.duration }}</span>
+                  </div>
+                </div>
+              </ng-template>
+
+              <div class="step-content">
+                <div class="position-info">
+                  <h5 class="position-title">{{ experience.position }}</h5>
+                </div>
+
+                <div class="projects-section">
+                  <h6 class="projects-title">Key Projects</h6>
+                  <ul class="projects-list">
+                    <li
+                      *ngFor="let project of experience.keyProjects; let j = index"
+                      class="project-item">
+                      {{ project }}
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="technologies-section">
+                  <h6 class="technologies-title">Technologies</h6>
+                  <div class="technologies-list">
+                    <span
+                      *ngFor="let tech of experience.technologies; let k = index"
+                      class="tech-tag">
+                      {{ tech }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </mat-step>
+          </mat-stepper>
+        </div>
+      </div>
+
+      <!-- Skills Highlight -->
+      <aside class="skills-highlight" role="complementary" aria-labelledby="skills-title">
+        <h3 id="skills-title" class="skills-title">Core Expertise</h3>
+        <div class="skills-list" role="list">
+          <span class="skill-tag" role="listitem">Angular</span>
+          <span class="skill-tag" role="listitem">TypeScript</span>
+          <span class="skill-tag" role="listitem">RxJS</span>
+          <span class="skill-tag" role="listitem">Micro Frontends</span>
+          <span class="skill-tag" role="listitem">Highcharts</span>
+          <span class="skill-tag" role="listitem">AG-Grid</span>
+          <span class="skill-tag" role="listitem">Three.js</span>
+          <span class="skill-tag" role="listitem">GSAP</span>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>

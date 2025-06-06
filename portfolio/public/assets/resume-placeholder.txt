@@ -1,0 +1,22 @@
+Uma Shankar Anantharapu - Resume Placeholder
+
+This is a placeholder file for the resume download functionality.
+In a real application, this would be replaced with an actual PDF resume.
+
+Contact Information:
+- Email: uma.shankar@example.com
+- Phone: +1 (555) 123-4567
+- LinkedIn: linkedin.com/in/umashankar
+- GitHub: github.com/umashankar
+
+Experience:
+- Software Engineer with 6+ Years in Angular Frontend Development
+- Developed Celeste and IOT Dashboard with MFE architecture
+- Optimized state management in CIS applications
+- Expert in Angular, RxJS, Highcharts, AG-Grid, Gridster, Three.js
+
+Skills:
+- Frontend: Angular, TypeScript, JavaScript, HTML5, CSS3, SCSS
+- Libraries: RxJS, GSAP, Three.js, Highcharts, AG-Grid
+- Architecture: Micro-frontends, Component-based design
+- Tools: Git, Chrome DevTools, Angular CLI, Webpack

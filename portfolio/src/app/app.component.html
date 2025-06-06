@@ -1,0 +1,10 @@
+<!-- Preloader -->
+<app-preloader *ngIf="showPreloader"></app-preloader>
+
+<!-- Main Application -->
+<div class="app-container" [class.preloader-active]="showPreloader">
+  <app-navbar></app-navbar>
+  <main class="main-content">
+    <router-outlet />
+  </main>
+</div>

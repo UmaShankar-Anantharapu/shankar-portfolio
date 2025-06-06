@@ -1,0 +1,18 @@
+.app-container {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.app-container.preloader-active {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.main-content {
+  padding-top: 80px; // Account for fixed navbar
+  min-height: 100vh;
+}
+
+/* Performance optimization: Prevent layout shifts during preloader */
+.preloader-active .main-content {
+  visibility: hidden;
+}

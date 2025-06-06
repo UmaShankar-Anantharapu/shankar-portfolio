@@ -1,0 +1,80 @@
+<svg width="400" height="500" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradients for Ghibli-style coloring -->
+    <linearGradient id="skinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFE4B5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F4A460;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="hairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#654321;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="shirtGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#26A69A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e8a7a;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="cheekGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FFB6C1;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#FFB6C1;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Transparent background - no background rectangle -->
+  
+  <!-- Character Body -->
+  <ellipse cx="200" cy="380" rx="80" ry="120" fill="url(#shirtGrad)" />
+  
+  <!-- Character Head -->
+  <ellipse cx="200" cy="180" rx="70" ry="85" fill="url(#skinGrad)" />
+  
+  <!-- Hair -->
+  <path d="M 130 140 Q 200 100 270 140 Q 280 160 270 180 Q 250 120 200 120 Q 150 120 130 180 Q 120 160 130 140 Z" fill="url(#hairGrad)" />
+  
+  <!-- Eyes -->
+  <ellipse cx="175" cy="165" rx="12" ry="15" fill="#2C3E50" />
+  <ellipse cx="225" cy="165" rx="12" ry="15" fill="#2C3E50" />
+  <ellipse cx="177" cy="162" rx="4" ry="5" fill="#FFFFFF" />
+  <ellipse cx="227" cy="162" rx="4" ry="5" fill="#FFFFFF" />
+  
+  <!-- Eyebrows -->
+  <path d="M 165 150 Q 175 145 185 150" stroke="#654321" stroke-width="3" fill="none" stroke-linecap="round" />
+  <path d="M 215 150 Q 225 145 235 150" stroke="#654321" stroke-width="3" fill="none" stroke-linecap="round" />
+  
+  <!-- Nose -->
+  <ellipse cx="200" cy="185" rx="3" ry="5" fill="#F4A460" opacity="0.7" />
+  
+  <!-- Mouth -->
+  <path d="M 190 205 Q 200 215 210 205" stroke="#CD5C5C" stroke-width="2" fill="none" stroke-linecap="round" />
+  
+  <!-- Cheeks -->
+  <ellipse cx="155" cy="190" rx="15" ry="10" fill="url(#cheekGrad)" />
+  <ellipse cx="245" cy="190" rx="15" ry="10" fill="url(#cheekGrad)" />
+  
+  <!-- Neck -->
+  <rect x="185" y="250" width="30" height="40" fill="url(#skinGrad)" />
+  
+  <!-- Arms -->
+  <ellipse cx="120" cy="350" rx="25" ry="60" fill="url(#shirtGrad)" />
+  <ellipse cx="280" cy="350" rx="25" ry="60" fill="url(#shirtGrad)" />
+  
+  <!-- Hands -->
+  <circle cx="120" cy="410" r="18" fill="url(#skinGrad)" />
+  <circle cx="280" cy="410" r="18" fill="url(#skinGrad)" />
+  
+  <!-- Ghibli-style sparkles around the character -->
+  <circle cx="100" cy="120" r="2" fill="#26A69A" opacity="0.7">
+    <animate attributeName="opacity" values="0.7;0.3;0.7" dur="2s" repeatCount="indefinite" />
+  </circle>
+  <circle cx="320" cy="150" r="1.5" fill="#26A69A" opacity="0.5">
+    <animate attributeName="opacity" values="0.5;0.2;0.5" dur="3s" repeatCount="indefinite" />
+  </circle>
+  <circle cx="80" cy="300" r="1" fill="#26A69A" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2.5s" repeatCount="indefinite" />
+  </circle>
+  <circle cx="340" cy="280" r="2.5" fill="#26A69A" opacity="0.4">
+    <animate attributeName="opacity" values="0.4;0.1;0.4" dur="4s" repeatCount="indefinite" />
+  </circle>
+  
+  <!-- Subtle shadow beneath character -->
+  <ellipse cx="200" cy="490" rx="60" ry="8" fill="#000000" opacity="0.1" />
+</svg>
