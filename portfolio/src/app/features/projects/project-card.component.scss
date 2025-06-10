@@ -8,20 +8,57 @@
   box-shadow: 12px 12px 24px rgba(0, 0, 0, 0.2), -12px -12px 24px rgba(255, 255, 255, 0.05), inset 0 0 0 1px rgba(38, 166, 154, 0.1);
   transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 
-  &.col-span-1 { grid-column: span 1; }
-  &.col-span-2 { grid-column: span 2; }
-  &.row-span-1 { grid-row: span 1; }
-  &.row-span-2 { grid-row: span 2; }
+  // Fixed heights for uniform layout - ENFORCED
+  &.col-span-1.row-span-1 {
+    grid-column: span 1;
+    grid-row: span 1;
+    height: 420px !important;
+    max-height: 420px !important;
+    min-height: 420px !important;
+  }
 
-  &.featured {
-    border: 2px solid var(--secondary-color);
-    box-shadow: 12px 12px 24px rgba(0, 0, 0, 0.25), -12px -12px 24px rgba(255, 255, 255, 0.08), inset 0 0 0 1px rgba(38, 166, 154, 0.2), 0 0 30px rgba(38, 166, 154, 0.15);
+  &.col-span-2.row-span-1 {
+    grid-column: span 2;
+    grid-row: span 1;
+    height: 350px !important;
+    max-height: 350px !important;
+    min-height: 350px !important;
+  }
+
+  &.col-span-2.row-span-2 {
+    grid-column: span 2;
+    grid-row: span 2;
+    height: 720px !important;
+    max-height: 720px !important;
+    min-height: 720px !important;
   }
 
   &:focus-within { outline: 2px solid var(--secondary-color); outline-offset: 4px; }
+
+  // Enhanced hover effects
+  &:hover {
+    .quick-preview {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-overlay {
+      opacity: 1;
+    }
+  }
 }
 
-.card-content { position: relative; height: 100%; padding: 2rem; display: flex; flex-direction: column; z-index: 2; }
+.card-content {
+  position: relative;
+  height: 100% !important;
+  max-height: 100% !important;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  overflow: hidden !important; // Ensure content doesn't overflow fixed height
+  box-sizing: border-box;
+}
 .card-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(38, 166, 154, 0.05) 0%, rgba(38, 166, 154, 0.1) 50%, rgba(38, 166, 154, 0.05) 100%); opacity: 0; transition: opacity 0.3s ease; z-index: 1; }
 .project-header { margin-bottom: 1.5rem; }
 .project-meta { display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; position: relative; }
@@ -53,6 +90,8 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  min-height: 0; // Allow flex items to shrink below content size
+  overflow: hidden; // Prevent overflow
 }
 
 .project-description {
@@ -62,6 +101,13 @@
   color: var(--text-color-secondary);
   margin: 0;
   flex: 1;
+
+  // Text truncation for consistent heights
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
 }
 
 .project-tech-info {
@@ -171,6 +217,24 @@
   font-size: 0.75rem;
   color: var(--text-color-secondary);
   font-style: italic;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(38, 166, 154, 0.2);
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    transform: scale(1.05);
+  }
+
+  &:focus {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+  }
 }
 
 // Project Footer
@@ -243,22 +307,29 @@
   transform: translateX(4px);
 }
 
-.project-status {
+// Quick Preview (replaces featured badge)
+.quick-preview {
   display: flex;
   align-items: center;
-}
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 
-.featured-badge {
-  background: linear-gradient(135deg, #ffd700, #ffed4e);
-  color: #1a1a1a;
-  padding: 0.5rem 0.75rem;
-  border-radius: 15px;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 600;
-  box-shadow: 
-    2px 2px 4px rgba(0, 0, 0, 0.2),
-    -1px -1px 2px rgba(255, 255, 255, 0.1);
+  .preview-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: var(--secondary-color);
+    font-weight: 500;
+    background: rgba(38, 166, 154, 0.1);
+    padding: 0.5rem 0.75rem;
+    border-radius: 12px;
+    border: 1px solid rgba(38, 166, 154, 0.2);
+    backdrop-filter: blur(10px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+  }
 }
 
 // Removed animations to reduce file size

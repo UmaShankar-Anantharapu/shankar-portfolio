@@ -66,7 +66,7 @@ export interface Skill {
       </div>
 
       <!-- Progress Bar -->
-      <div class="progress-container">
+      <!-- <div class="progress-container">
         <div class="progress-track">
           <div 
             #progressBar
@@ -81,12 +81,12 @@ export interface Skill {
             <div class="progress-glow"></div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- Skill Badge -->
-      <div class="skill-badge" [style.background-color]="skill.color || 'var(--secondary-color)'">
+      <!-- <div class="skill-badge" [style.background-color]="skill.color || 'var(--secondary-color)'">
         <span class="badge-text">{{ getCategoryDisplayName(skill.category) }}</span>
-      </div>
+      </div> -->
 
       <!-- Performance indicator for project-linked skills -->
       <div *ngIf="skill.hasProjectReference" class="project-indicator" title="Used in projects">

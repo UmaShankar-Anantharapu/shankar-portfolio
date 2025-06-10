@@ -71,28 +71,71 @@
       <div class="timeline-section" #timelineContainer role="region" aria-labelledby="timeline-title">
         <h3 id="timeline-title" class="timeline-title">Professional Journey</h3>
         <div class="timeline-container">
-          <mat-stepper
-            orientation="vertical"
-            class="experience-stepper"
-            [linear]="false"
-            [animationDuration]="'300ms'">
-
-            <mat-step
+          <div class="experience-accordion">
+            <div
               *ngFor="let experience of workExperience; let i = index; trackBy: trackByWorkExperience"
-              [completed]="true"
-              class="timeline-step">
+              class="timeline-step"
+              [class.expanded]="experience.isExpanded">
 
-              <ng-template matStepLabel>
-                <div class="step-label">
-                  <span class="company-icon">{{ experience.icon }}</span>
-                  <div class="company-info">
-                    <h4 class="company-name">{{ experience.company }}</h4>
-                    <span class="company-duration">{{ experience.duration }}</span>
+              <!-- Accordion Header -->
+              <div
+                class="step-header"
+                (click)="toggleWorkExperience(i)"
+                (keydown.enter)="toggleWorkExperience(i, $event)"
+                (keydown.space)="toggleWorkExperience(i, $event)"
+                role="button"
+                tabindex="0"
+                [attr.aria-expanded]="experience.isExpanded"
+                [attr.aria-controls]="'content-' + i"
+                [attr.aria-label]="'Toggle ' + experience.company + ' details. Currently ' + (experience.isExpanded ? 'expanded' : 'collapsed')">
+
+                <div class="step-number">{{ i + 1 }}</div>
+
+                <div class="company-logo">
+                  <img
+                    [src]="experience.logoUrl"
+                    [alt]="experience.company + ' logo'"
+                    class="logo-image"
+                    loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                  <div class="logo-fallback">
+                    {{ experience.company.charAt(0) }}
                   </div>
                 </div>
-              </ng-template>
 
-              <div class="step-content">
+                <div class="company-info">
+                  <h4 class="company-name">{{ experience.company }}</h4>
+                  <span class="company-duration">{{ experience.duration }}</span>
+                </div>
+
+                <div class="step-controls">
+                  <button
+                    *ngIf="!experience.isExpanded"
+                    class="edit-icon"
+                    type="button"
+                    [attr.aria-label]="'Edit ' + experience.company + ' details'"
+                    tabindex="-1">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                  </button>
+
+                  <div class="expand-icon" [class.rotated]="experience.isExpanded">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="6,9 12,15 18,9"></polyline>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Accordion Content -->
+              <div
+                class="step-content"
+                [id]="'content-' + i"
+                [attr.aria-hidden]="!experience.isExpanded"
+                [style.display]="experience.isExpanded ? 'block' : 'none'">
+
                 <div class="position-info">
                   <h5 class="position-title">{{ experience.position }}</h5>
                 </div>
@@ -119,13 +162,13 @@
                   </div>
                 </div>
               </div>
-            </mat-step>
-          </mat-stepper>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- Skills Highlight -->
-      <aside class="skills-highlight" role="complementary" aria-labelledby="skills-title">
+      <!-- <aside class="skills-highlight" role="complementary" aria-labelledby="skills-title">
         <h3 id="skills-title" class="skills-title">Core Expertise</h3>
         <div class="skills-list" role="list">
           <span class="skill-tag" role="listitem">Angular</span>
@@ -137,7 +180,7 @@
           <span class="skill-tag" role="listitem">Three.js</span>
           <span class="skill-tag" role="listitem">GSAP</span>
         </div>
-      </aside>
+      </aside> -->
     </div>
   </div>
 </section>

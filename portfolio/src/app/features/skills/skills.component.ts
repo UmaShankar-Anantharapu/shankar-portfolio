@@ -53,7 +53,7 @@ export interface AngularTimelineItem {
       </header>
 
       <!-- Angular Timeline Section -->
-      <div class="angular-timeline-section" role="region" aria-labelledby="angular-timeline-title">
+      <!-- <div class="angular-timeline-section" role="region" aria-labelledby="angular-timeline-title">
         <div class="timeline-header">
           <h2 id="angular-timeline-title" class="timeline-title">
             <span class="timeline-icon">🅰️</span>
@@ -109,12 +109,11 @@ export interface AngularTimelineItem {
                 </div>
               </div>
 
-              <!-- Timeline connector -->
               <div class="timeline-connector" aria-hidden="true"></div>
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- Skills Categories -->
       <div class="skills-container">

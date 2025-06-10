@@ -55,6 +55,20 @@ html, body {
   font-weight: 700;
 }
 
+/* Project Detail Modal Styles - Fix White Space */
+.mat-mdc-dialog-container {
+  background: var(--primary-color) !important;
+  color: var(--text-color) !important;
+}
+
+.cdk-overlay-pane {
+  background: transparent !important;
+}
+
+.cdk-overlay-backdrop {
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
 /* Enhanced Cube Tooltip with Premium Styling */
 #cube-tooltip {
   font-family: 'Inter', sans-serif;

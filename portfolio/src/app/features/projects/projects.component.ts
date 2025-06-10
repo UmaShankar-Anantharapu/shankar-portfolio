@@ -5,9 +5,10 @@ import { ThemeService } from '../../core/services/theme.service';
 import { SkillsNavigationService } from '../../core/services/skills-navigation.service';
 import { CelesteKpiModalComponent } from './celeste-kpi-modal.component';
 import { IcoSphereModalComponent } from './ico-sphere-modal.component';
+import { ProjectDetailModalComponent } from './project-detail-modal.component';
 import { Project } from './project-card.component';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import lottie from 'lottie-web';
@@ -26,12 +27,18 @@ gsap.registerPlugin(ScrollTrigger);
 export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('bentoGrid', { static: false }) bentoGrid!: ElementRef;
   @ViewChild('celesteLottie', { static: false }) celesteLottie!: ElementRef;
+  @ViewChild('searchInput', { static: false }) searchInput!: ElementRef;
 
   currentTheme$!: Observable<string>;
+  searchQuery = '';
+  filteredProjects: Project[] = [];
+  isSearching = false;
+
   private scrollTriggers: ScrollTrigger[] = [];
   private animationFrameId: number | null = null;
   private lottieAnimation: any = null;
   private destroy$ = new Subject<void>();
+  private searchSubject$ = new Subject<string>();
 
   readonly projects: readonly Project[] = [
     {
@@ -43,7 +50,15 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
       technologies: ['Angular', 'TypeScript', 'RxJS', 'Highcharts', 'Azure', 'Material Design'],
       category: 'Enterprise',
       size: 'large',
-      featured: true
+      keyFeatures: ['Real-time Monitoring', 'Advanced Analytics', 'Comprehensive Reporting', 'Asset Management'],
+      fullDescription: 'Celeste is a comprehensive renewable energy management platform designed for enterprise-scale operations. The platform provides real-time monitoring of solar and wind energy assets, advanced analytics for performance optimization, and detailed reporting capabilities. Built with Angular 16 and integrated with Azure cloud services, it handles massive amounts of data while maintaining optimal performance.',
+      myRole: 'Senior Frontend Developer - Led the frontend architecture design, implemented real-time data visualization components, and optimized performance for large-scale data handling.',
+      duration: '8 months',
+      teamSize: 6,
+      challenges: ['Handling real-time data streams', 'Complex data visualization requirements', 'Performance optimization for large datasets', 'Integration with multiple IoT devices'],
+      achievements: ['Reduced data loading time by 60%', 'Implemented real-time dashboard with 99.9% uptime', 'Created reusable component library', 'Achieved 95+ Lighthouse performance score'],
+      demoUrl: 'https://celeste-demo.greenkogroup.com',
+      sourceCodeUrl: 'https://github.com/greenko/celeste-frontend'
     },
     {
       id: 'iot-dashboard',
@@ -54,7 +69,15 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
       technologies: ['Angular', 'TypeScript', 'Three.js', 'WebSocket', 'AG-Grid', 'D3.js'],
       category: 'IoT',
       size: 'large',
-      featured: true
+      keyFeatures: ['Real-time Device Monitoring', 'Predictive Analytics', 'Alert Management', '3D Visualization'],
+      fullDescription: 'A sophisticated IoT dashboard that monitors thousands of industrial devices in real-time. Features include predictive analytics for maintenance scheduling, customizable alert systems, and immersive 3D visualizations of device networks. The platform processes millions of data points daily while maintaining sub-second response times.',
+      myRole: 'Frontend Developer - Developed real-time data visualization components, implemented WebSocket connections for live updates, and created 3D device network visualizations using Three.js.',
+      duration: '10 months',
+      teamSize: 8,
+      challenges: ['Real-time data synchronization', 'Complex 3D visualizations', 'Scalable architecture for thousands of devices', 'Cross-platform compatibility'],
+      achievements: ['Processed 1M+ data points per minute', 'Achieved 99.5% uptime', 'Reduced false alerts by 40%', 'Implemented predictive maintenance algorithms'],
+      demoUrl: 'https://iot-demo.braneenterprises.com',
+      sourceCodeUrl: 'https://github.com/brane/iot-dashboard'
     },
     {
       id: 'ico-sphere',
@@ -65,7 +88,14 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
       technologies: ['Angular', 'TypeScript', 'Three.js', 'WebGL', 'GSAP', 'Cannon.js'],
       category: '3D Visualization',
       size: 'medium',
-      featured: true
+      keyFeatures: ['Interactive 3D Environments', 'Real-time Rendering', 'Physics Simulation', 'Advanced Animations'],
+      fullDescription: 'ICO Sphere is an innovative 3D visualization platform that creates immersive interactive environments. Built with cutting-edge WebGL technology and Three.js, it features real-time physics simulations, advanced lighting systems, and smooth animations. The platform is optimized for both desktop and mobile devices.',
+      myRole: 'Frontend Developer - Implemented 3D rendering engine, developed physics simulations, created interactive user interfaces, and optimized performance for various devices.',
+      duration: '6 months',
+      teamSize: 4,
+      challenges: ['Complex 3D mathematics', 'Performance optimization for mobile', 'Cross-browser WebGL compatibility', 'Real-time physics calculations'],
+      achievements: ['60fps performance on mobile devices', 'Cross-browser compatibility 95%+', 'Reduced loading time by 50%', 'Implemented advanced shader effects'],
+      demoUrl: 'https://ico-sphere-demo.braneenterprises.com'
     },
     {
       id: 'nh-cam',
@@ -76,7 +106,14 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
       technologies: ['Angular', 'TypeScript', 'WebRTC', 'Socket.io', 'OpenCV.js', 'FFmpeg'],
       category: 'Media',
       size: 'medium',
-      featured: false
+      keyFeatures: ['Live Streaming', 'Motion Detection', 'Cloud Recording', 'Mobile App Integration'],
+      fullDescription: 'NH Cam is a comprehensive camera management system designed for security and surveillance applications. It provides real-time video streaming, intelligent motion detection, cloud-based recording, and mobile app integration. The system supports multiple camera types and offers advanced video analytics capabilities.',
+      myRole: 'Frontend Developer - Developed video streaming interfaces, implemented real-time communication protocols, created mobile-responsive UI, and integrated video analytics features.',
+      duration: '7 months',
+      teamSize: 5,
+      challenges: ['Real-time video streaming optimization', 'Cross-platform mobile compatibility', 'Bandwidth optimization', 'Video codec integration'],
+      achievements: ['Reduced streaming latency by 70%', 'Achieved 99.8% uptime', 'Implemented AI-powered motion detection', 'Created responsive mobile interface'],
+      demoUrl: 'https://nh-cam-demo.braneenterprises.com'
     },
     {
       id: 'cis',
@@ -87,7 +124,14 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
       technologies: ['Angular', 'TypeScript', 'Bootstrap', 'Chart.js', 'REST APIs', 'JWT'],
       category: 'CRM',
       size: 'medium',
-      featured: false
+      keyFeatures: ['Customer Data Management', 'Analytics Dashboard', 'Report Generation', 'User Role Management'],
+      fullDescription: 'CIS is a robust customer information system designed to streamline customer data management for businesses. It features comprehensive customer profiles, advanced analytics dashboards, automated report generation, and flexible user role management. The system integrates with multiple data sources and provides real-time insights.',
+      myRole: 'Frontend Developer - Designed and implemented customer management interfaces, developed analytics dashboards, created reporting modules, and implemented responsive design patterns.',
+      duration: '9 months',
+      teamSize: 6,
+      challenges: ['Complex data relationships', 'Performance with large datasets', 'Multi-tenant architecture', 'Advanced reporting requirements'],
+      achievements: ['Managed 100K+ customer records', 'Reduced data processing time by 45%', 'Implemented role-based access control', 'Created automated reporting system'],
+      demoUrl: 'https://cis-demo.sreetech.com'
     },
     {
       id: 'career-trek',
@@ -98,7 +142,14 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
       technologies: ['Angular', 'TypeScript', 'Bootstrap', 'Node.js', 'MongoDB', 'Express'],
       category: 'Career',
       size: 'small',
-      featured: false
+      keyFeatures: ['Job Matching Algorithm', 'Resume Builder', 'Career Assessment', 'Interview Preparation'],
+      fullDescription: 'Career Trek is an innovative career guidance platform that helps job seekers find their ideal career path. It features intelligent job matching algorithms, a comprehensive resume builder, career assessment tools, and interview preparation resources. The platform uses machine learning to provide personalized career recommendations.',
+      myRole: 'Frontend Developer - Developed user interfaces for job matching, implemented resume builder functionality, created assessment modules, and designed responsive layouts.',
+      duration: '5 months',
+      teamSize: 4,
+      challenges: ['Algorithm integration', 'Dynamic form generation', 'PDF generation for resumes', 'User experience optimization'],
+      achievements: ['Matched 5000+ job seekers', 'Generated 10K+ resumes', 'Achieved 85% user satisfaction', 'Implemented ML-based recommendations'],
+      demoUrl: 'https://career-trek-demo.sreetech.com'
     },
     {
       id: 'photoshooto',
@@ -109,7 +160,14 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
       technologies: ['Angular', 'JavaScript', 'SASS', 'jQuery', 'PHP', 'MySQL'],
       category: 'Portfolio',
       size: 'small',
-      featured: false
+      keyFeatures: ['Portfolio Galleries', 'Booking System', 'Payment Integration', 'Mobile Optimization'],
+      fullDescription: 'Photoshooto is a comprehensive photography platform that connects photographers with clients. It features stunning portfolio galleries, an integrated booking system, secure payment processing, and mobile-optimized interfaces. The platform supports multiple photographer profiles and provides tools for portfolio management.',
+      myRole: 'Frontend Developer - Created responsive gallery interfaces, implemented booking system UI, integrated payment gateways, and optimized mobile experience.',
+      duration: '4 months',
+      teamSize: 3,
+      challenges: ['Image optimization', 'Payment gateway integration', 'Mobile responsiveness', 'Gallery performance'],
+      achievements: ['Optimized image loading by 60%', 'Integrated multiple payment methods', 'Achieved mobile-first design', 'Created reusable gallery components'],
+      demoUrl: 'https://photoshooto-demo.zinovia.com'
     }
   ] as const;
 
@@ -123,6 +181,20 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.currentTheme$ = this.themeService.currentTheme$;
+
+    // Initialize filtered projects with all projects
+    this.filteredProjects = [...this.projects];
+
+    // Set up search functionality with debouncing
+    this.searchSubject$
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(query => {
+        this.performSearch(query);
+      });
 
     // Subscribe to skill highlights for performance monitoring
     this.skillsNavigationService.highlightedSkill$
@@ -183,9 +255,118 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // Get featured projects count
-  getFeaturedProjectsCount(): number {
-    return this.projects.filter(project => project.featured).length;
+  // Get total projects count
+  getTotalProjectsCount(): number {
+    return this.projects.length;
+  }
+
+  // Search functionality
+  onSearchInput(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.searchQuery = target.value;
+    this.searchSubject$.next(this.searchQuery);
+  }
+
+  // Clear search
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.searchSubject$.next('');
+    if (this.searchInput?.nativeElement) {
+      this.searchInput.nativeElement.focus();
+    }
+  }
+
+  // Perform search with animation
+  private performSearch(query: string): void {
+    this.isSearching = true;
+
+    if (!query.trim()) {
+      this.filteredProjects = [...this.projects];
+    } else {
+      const searchTerm = query.toLowerCase();
+      this.filteredProjects = this.projects.filter(project =>
+        project.title.toLowerCase().includes(searchTerm) ||
+        project.company.toLowerCase().includes(searchTerm) ||
+        project.description.toLowerCase().includes(searchTerm) ||
+        project.technologies.some(tech => tech.toLowerCase().includes(searchTerm)) ||
+        project.category.toLowerCase().includes(searchTerm) ||
+        project.keyFeatures.some(feature => feature.toLowerCase().includes(searchTerm))
+      );
+    }
+
+    // Animate search results
+    if (isPlatformBrowser(this.platformId)) {
+      this.animateSearchResults();
+    }
+
+    this.isSearching = false;
+    this.cdr.markForCheck();
+  }
+
+  // Animate search results
+  private animateSearchResults(): void {
+    if (!this.bentoGrid?.nativeElement) return;
+
+    const projectCards = this.bentoGrid.nativeElement.querySelectorAll('.project-card');
+
+    // Fade out and then fade in with stagger
+    gsap.to(projectCards, {
+      opacity: 0,
+      scale: 0.9,
+      duration: 0.2,
+      ease: 'power2.in',
+      onComplete: () => {
+        // Wait for Angular to update the DOM
+        setTimeout(() => {
+          const newCards = this.bentoGrid.nativeElement.querySelectorAll('.project-card');
+          gsap.fromTo(newCards,
+            {
+              opacity: 0,
+              scale: 0.9,
+              y: 20
+            },
+            {
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              duration: 0.4,
+              stagger: 0.1,
+              ease: 'power2.out'
+            }
+          );
+        }, 50);
+      }
+    });
+  }
+
+  // Handle project card click to open appropriate modal
+  onProjectCardClick(project: Project): void {
+    if (project.id === 'celeste') {
+      this.dialog.open(CelesteKpiModalComponent, {
+        width: '90vw',
+        maxWidth: '1200px',
+        height: '90vh',
+        panelClass: ['custom-modal-panel', 'celeste-modal'],
+        data: { project }
+      });
+    } else if (project.id === 'ico-sphere') {
+      this.dialog.open(IcoSphereModalComponent, {
+        width: '90vw',
+        maxWidth: '1000px',
+        height: '90vh',
+        panelClass: ['custom-modal-panel', 'ico-sphere-modal'],
+        data: { project }
+      });
+    } else {
+      // Use generic project detail modal for all other projects
+      this.dialog.open(ProjectDetailModalComponent, {
+        width: '90vw',
+        maxWidth: '900px',
+        height: '90vh',
+        panelClass: ['custom-modal-panel', 'project-detail-modal'],
+        data: { project }
+      });
+    }
   }
 
   // Handle skill navigation from project cards
@@ -235,8 +416,8 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
         // Remove highlight after 2 seconds
         setTimeout(() => {
           gsap.to(card, {
-            borderColor: project.featured ? 'var(--secondary-color)' : 'rgba(38, 166, 154, 0.1)',
-            borderWidth: project.featured ? '2px' : '1px',
+            borderColor: 'rgba(38, 166, 154, 0.1)',
+            borderWidth: '1px',
             duration: 0.3,
             ease: 'power2.out'
           });
@@ -470,6 +651,11 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     };
   }
 
+  // Handle view details (legacy method for compatibility)
+  onViewDetails(project: Project): void {
+    this.onProjectCardClick(project);
+  }
+
   // Clean up all animations
   private cleanupAnimations(): void {
     // Kill all GSAP animations
@@ -483,115 +669,5 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     ScrollTrigger.refresh();
   }
 
-  // Handle view details click
-  onViewDetails(project: Project): void {
-    if (project.id === 'celeste') {
-      this.openCelesteModal();
-    } else if (project.id === 'ico-sphere') {
-      this.openIcoSphereModal();
-    } else {
-      // Placeholder for other projects
-      console.log(`View details for project: ${project.title}`);
-      alert(`View Details for ${project.title}\n\nThis is a placeholder for the project details view. In a real application, this would navigate to a detailed project page or open a modal with more information.`);
-    }
-  }
 
-  // Open Celeste KPI modal
-  private openCelesteModal(): void {
-    const dialogRef = this.dialog.open(CelesteKpiModalComponent, {
-      width: '90vw',
-      maxWidth: '600px',
-      height: 'auto',
-      maxHeight: '90vh',
-      panelClass: 'celeste-modal-panel',
-      disableClose: false,
-      autoFocus: true,
-      restoreFocus: true
-    });
-
-    // Add entrance animation to modal
-    dialogRef.afterOpened().subscribe(() => {
-      const modalElement = document.querySelector('.celeste-modal-panel .mat-mdc-dialog-container');
-      if (modalElement) {
-        gsap.fromTo(modalElement,
-          {
-            opacity: 0,
-            scale: 0.8,
-            y: 50
-          },
-          {
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            duration: 0.4,
-            ease: 'power2.out'
-          }
-        );
-      }
-    });
-
-    dialogRef.beforeClosed().subscribe(() => {
-      const modalElement = document.querySelector('.celeste-modal-panel .mat-mdc-dialog-container');
-      if (modalElement) {
-        gsap.to(modalElement, {
-          opacity: 0,
-          scale: 0.9,
-          y: -20,
-          duration: 0.3,
-          ease: 'power2.in'
-        });
-      }
-    });
-  }
-
-  // Open ICO Sphere modal
-  private openIcoSphereModal(): void {
-    const dialogRef = this.dialog.open(IcoSphereModalComponent, {
-      width: '95vw',
-      maxWidth: '800px',
-      height: 'auto',
-      maxHeight: '95vh',
-      panelClass: 'ico-sphere-modal-panel',
-      disableClose: false,
-      autoFocus: true,
-      restoreFocus: true
-    });
-
-    // Add entrance animation to modal
-    dialogRef.afterOpened().subscribe(() => {
-      const modalElement = document.querySelector('.ico-sphere-modal-panel .mat-mdc-dialog-container');
-      if (modalElement) {
-        gsap.fromTo(modalElement,
-          {
-            opacity: 0,
-            scale: 0.8,
-            y: 50,
-            rotationY: -15
-          },
-          {
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            rotationY: 0,
-            duration: 0.6,
-            ease: 'power2.out'
-          }
-        );
-      }
-    });
-
-    dialogRef.beforeClosed().subscribe(() => {
-      const modalElement = document.querySelector('.ico-sphere-modal-panel .mat-mdc-dialog-container');
-      if (modalElement) {
-        gsap.to(modalElement, {
-          opacity: 0,
-          scale: 0.9,
-          y: -30,
-          rotationY: 15,
-          duration: 0.3,
-          ease: 'power2.in'
-        });
-      }
-    });
-  }
 }

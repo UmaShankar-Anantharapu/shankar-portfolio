@@ -1,0 +1,7 @@
+<svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="40" rx="8" fill="#2c3e50"/>
+  <text x="60" y="18" text-anchor="middle" fill="#26a69a" font-family="Arial, sans-serif" font-size="10" font-weight="bold">TECH</text>
+  <text x="60" y="32" text-anchor="middle" fill="#26a69a" font-family="Arial, sans-serif" font-size="10" font-weight="bold">TAMMINA</text>
+  <polygon points="10,20 20,15 20,25" fill="#26a69a"/>
+  <polygon points="110,20 100,15 100,25" fill="#26a69a"/>
+</svg>

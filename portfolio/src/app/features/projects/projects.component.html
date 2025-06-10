@@ -6,29 +6,92 @@
       <p class="projects-subtitle">
         A showcase of innovative applications and solutions I've developed across different technologies and domains.
       </p>
+
+      <!-- Search Functionality -->
+      <div class="search-container">
+        <div class="search-input-wrapper">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Search projects...</mat-label>
+            <input
+              #searchInput
+              matInput
+              type="text"
+              [(ngModel)]="searchQuery"
+              (input)="onSearchInput($event)"
+              placeholder="Search by name, company, technology, or feature"
+              [attr.aria-label]="'Search projects. ' + filteredProjects.length + ' of ' + projects.length + ' projects shown'">
+            <mat-icon matSuffix class="search-icon">search</mat-icon>
+          </mat-form-field>
+
+          <button
+            *ngIf="searchQuery"
+            type="button"
+            class="clear-search-btn"
+            (click)="clearSearch()"
+            aria-label="Clear search">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
+        <!-- Search Results Info -->
+        <div class="search-results-info" *ngIf="searchQuery">
+          <span class="results-text">
+            Showing {{ filteredProjects.length }} of {{ projects.length }} projects
+            <span *ngIf="filteredProjects.length === 0" class="no-results">
+              - Try different keywords
+            </span>
+          </span>
+        </div>
+      </div>
     </header>
 
+    <!-- Loading State -->
+    <div *ngIf="isSearching" class="loading-skeleton">
+      <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5,6]"></div>
+    </div>
+
     <!-- Bento Grid Layout with Performance-Optimized Project Cards -->
-    <div #bentoGrid class="bento-grid" role="region" aria-label="Projects showcase">
+    <div
+      #bentoGrid
+      class="bento-grid"
+      role="region"
+      [attr.aria-label]="'Projects showcase - ' + filteredProjects.length + ' projects displayed'"
+      *ngIf="!isSearching">
+
       <app-project-card
-        *ngFor="let project of projects; trackBy: trackByProjectId"
+        *ngFor="let project of filteredProjects; trackBy: trackByProjectId"
         [project]="project"
         [gridSizeClass]="getGridSizeClass(project)"
-        (viewDetails)="onViewDetails($event)"
+        (cardClick)="onProjectCardClick(project)"
         (skillNavigation)="onSkillNavigation($event)">
       </app-project-card>
+
+      <!-- No Results State -->
+      <div *ngIf="filteredProjects.length === 0 && searchQuery" class="no-results-state">
+        <div class="no-results-icon">🔍</div>
+        <h3 class="no-results-title">No projects found</h3>
+        <p class="no-results-text">
+          Try searching with different keywords like technology names, company names, or project features.
+        </p>
+        <button
+          type="button"
+          class="clear-search-btn-alt"
+          (click)="clearSearch()">
+          Clear Search
+        </button>
+      </div>
     </div>
 
     <!-- Projects Summary -->
-    <footer class="projects-summary">
+    <footer class="projects-summary" *ngIf="!isSearching">
       <div class="summary-stats">
         <div class="stat-item">
           <span class="stat-number">{{ projects.length }}</span>
           <span class="stat-label">Total Projects</span>
         </div>
         <div class="stat-item">
-          <span class="stat-number">{{ getFeaturedProjectsCount() }}</span>
-          <span class="stat-label">Featured Projects</span>
+          <span class="stat-number">{{ filteredProjects.length }}</span>
+          <span class="stat-label">{{ searchQuery ? 'Filtered' : 'Displayed' }}</span>
         </div>
         <div class="stat-item">
           <span class="stat-number">4</span>

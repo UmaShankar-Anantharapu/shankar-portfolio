@@ -28,17 +28,24 @@ export interface Project {
   readonly technologies: readonly string[];
   readonly category: string;
   readonly size: 'small' | 'medium' | 'large';
-  readonly featured: boolean;
+  readonly keyFeatures: readonly string[];
+  readonly fullDescription: string;
+  readonly myRole: string;
+  readonly duration: string;
+  readonly teamSize: number;
+  readonly challenges: readonly string[];
+  readonly achievements: readonly string[];
+  readonly demoUrl?: string;
+  readonly sourceCodeUrl?: string;
 }
 
 @Component({
   selector: 'app-project-card',
   template: `
-    <article 
+    <article
       #cardElement
       class="project-card"
       [class]="gridSizeClass"
-      [class.featured]="project.featured"
       [attr.data-project-id]="project.id"
       [attr.aria-label]="'Project: ' + project.title + ' at ' + project.company"
       (click)="onCardClick($event)">
@@ -89,9 +96,15 @@ export interface Project {
                   [attr.title]="isRecognizedSkill(tech) ? 'Click to view skill details' : tech">
                   {{ tech }}
                 </span>
-                <span 
-                  *ngIf="project.technologies.length > 3" 
-                  class="tech-more">
+                <span
+                  *ngIf="project.technologies.length > 3"
+                  class="tech-more"
+                  (click)="onShowMoreTech($event)"
+                  role="button"
+                  tabindex="0"
+                  [attr.aria-label]="'Show ' + (project.technologies.length - 3) + ' more technologies'"
+                  (keydown.enter)="onShowMoreTech($event)"
+                  (keydown.space)="onShowMoreTech($event)">
                   +{{ project.technologies.length - 3 }} more
                 </span>
               </div>
@@ -101,7 +114,7 @@ export interface Project {
 
         <!-- Project Footer -->
         <footer class="project-footer">
-          <button 
+          <button
             type="button"
             class="view-details-btn"
             (click)="onViewDetailsClick($event)"
@@ -109,9 +122,10 @@ export interface Project {
             <span class="btn-text">View Details</span>
             <span class="btn-icon" aria-hidden="true">→</span>
           </button>
-          
-          <div class="project-status" *ngIf="project.featured">
-            <span class="featured-badge" aria-label="Featured project">⭐ Featured</span>
+
+          <!-- Quick preview on hover -->
+          <div class="quick-preview" [attr.aria-label]="'Quick preview: ' + project.keyFeatures.slice(0, 2).join(', ')">
+            <span class="preview-text">{{ project.keyFeatures.slice(0, 2).join(' • ') }}</span>
           </div>
         </footer>
       </div>
@@ -129,6 +143,7 @@ export class ProjectCardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Output() viewDetails = new EventEmitter<Project>();
   @Output() skillNavigation = new EventEmitter<string>();
+  @Output() cardClick = new EventEmitter<Project>();
 
   @ViewChild('cardElement', { static: true }) cardElement!: ElementRef;
   @ViewChild('celesteLottie', { static: false }) celesteLottie!: ElementRef;
@@ -192,12 +207,12 @@ export class ProjectCardComponent implements OnInit, AfterViewInit, OnDestroy {
   onCardClick(event: Event): void {
     // Prevent default card click if clicking on interactive elements
     const target = event.target as HTMLElement;
-    if (target.closest('.tech-tag-mini, .view-details-btn')) {
+    if (target.closest('.tech-tag-mini, .view-details-btn, .tech-more')) {
       return;
     }
 
-    // Default card click behavior - could expand card or show quick preview
-    this.onViewDetailsClick(event);
+    // Emit card click event for parent component to handle
+    this.cardClick.emit(this.project);
   }
 
   /**
@@ -224,6 +239,15 @@ export class ProjectCardComponent implements OnInit, AfterViewInit, OnDestroy {
   onViewDetailsClick(event: Event): void {
     event.stopPropagation();
     this.viewDetails.emit(this.project);
+  }
+
+  /**
+   * Handle "show more technologies" click
+   */
+  onShowMoreTech(event: Event): void {
+    event.stopPropagation();
+    // Open the project modal to show all technologies
+    this.cardClick.emit(this.project);
   }
 
   /**

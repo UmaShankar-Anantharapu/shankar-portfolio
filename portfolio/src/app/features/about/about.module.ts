@@ -4,7 +4,6 @@ import { AboutRoutingModule } from './about-routing.module';
 import { AboutComponent } from './about.component';
 
 // Angular Material imports
-import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -15,7 +14,6 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [
     CommonModule,
     AboutRoutingModule,
-    MatStepperModule,
     MatIconModule,
     MatButtonModule
   ]

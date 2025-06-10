@@ -40,6 +40,8 @@ interface WorkExperience {
   readonly keyProjects: readonly string[];
   readonly technologies: readonly string[];
   readonly icon: string;
+  readonly logoUrl: string;
+  readonly isExpanded?: boolean;
 }
 
 @Component({
@@ -87,8 +89,8 @@ export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   ] as const;
 
-  // Work experience timeline data
-  readonly workExperience: readonly WorkExperience[] = [
+  // Work experience timeline data with accordion state management
+  workExperience: WorkExperience[] = [
     {
       company: 'Greenko Group',
       duration: 'Dec 2024 - Present',
@@ -101,7 +103,9 @@ export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
         'Performance Analytics Platform'
       ],
       technologies: ['Angular', 'TypeScript', 'RxJS', 'Highcharts', 'Azure'],
-      icon: '🌱'
+      icon: '🌱',
+      logoUrl: 'https://greenkogroup.com/images/new-logo.svg',
+      isExpanded: false
     },
     {
       company: 'Brane Enterprises',
@@ -115,10 +119,12 @@ export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
         'Micro Frontend Architecture'
       ],
       technologies: ['Angular', 'TypeScript', 'Micro Frontends', 'AG-Grid', 'Three.js'],
-      icon: '🚀'
+      icon: '🚀',
+      logoUrl: 'assets/images/logos/brane-logo.svg',
+      isExpanded: false
     },
     {
-      company: 'Sree Tech Tammina',
+      company: 'Tech Tammina',
       duration: 'Oct 2021 - Dec 2022',
       startDate: 'Oct 2021',
       endDate: 'Dec 2022',
@@ -129,10 +135,12 @@ export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
         'Responsive Web Applications'
       ],
       technologies: ['Angular', 'JavaScript', 'Bootstrap', 'REST APIs', 'Git'],
-      icon: '💻'
+      icon: '💻',
+      logoUrl: 'assets/images/logos/tech-tammina-logo.svg',
+      isExpanded: false
     },
     {
-      company: 'Zinovia',
+      company: 'Zino Technologies',
       duration: 'Aug 2019 - Sep 2021',
       startDate: 'Aug 2019',
       endDate: 'Sep 2021',
@@ -143,9 +151,11 @@ export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
         'Cross-browser Compatibility'
       ],
       technologies: ['HTML5', 'CSS3', 'JavaScript', 'jQuery', 'SASS'],
-      icon: '🎯'
+      icon: '🎯',
+      logoUrl: 'https://zinotechnologies.com/images/logo-wide.png',
+      isExpanded: false
     }
-  ] as const;
+  ];
 
   // Optimized content for voice narration
   private readonly aboutContent = `I'm a Software Engineer with 6 years of experience in Angular frontend development,
@@ -372,7 +382,7 @@ export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.timelineContainer?.nativeElement) return;
 
     // Animate timeline steps with staggered fade in effect
-    const timelineSteps = this.timelineContainer.nativeElement.querySelectorAll('.mat-step');
+    const timelineSteps = this.timelineContainer.nativeElement.querySelectorAll('.timeline-step');
 
     if (timelineSteps.length > 0) {
       gsap.set(timelineSteps, {
@@ -391,7 +401,7 @@ export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
             opacity: 1,
             y: 0,
             duration: 0.8,
-            stagger: 0.3,
+            stagger: 0.2, // Reduced stagger for better flow
             ease: 'power2.out',
             force3D: true
           });
@@ -401,7 +411,7 @@ export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
             opacity: 0,
             y: -50,
             duration: 0.6,
-            stagger: 0.2,
+            stagger: 0.1,
             ease: 'power2.in',
             force3D: true
           });
@@ -411,7 +421,7 @@ export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
             opacity: 1,
             y: 0,
             duration: 0.8,
-            stagger: 0.3,
+            stagger: 0.2,
             ease: 'power2.out',
             force3D: true
           });
@@ -421,7 +431,7 @@ export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
             opacity: 0,
             y: 50,
             duration: 0.6,
-            stagger: 0.2,
+            stagger: 0.1,
             ease: 'power2.in',
             force3D: true
           });
@@ -643,5 +653,100 @@ export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
   // Track by function for work experience timeline
   trackByWorkExperience(index: number, work: WorkExperience): string {
     return `${work.company}-${work.startDate}`;
+  }
+
+  // Toggle accordion state for work experience
+  toggleWorkExperience(index: number, event?: Event): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    // Prevent default for keyboard events
+    if (event && event instanceof KeyboardEvent) {
+      event.preventDefault();
+    }
+
+    const experience = this.workExperience[index];
+    const wasExpanded = experience.isExpanded;
+
+    // Update state
+    this.workExperience[index] = {
+      ...experience,
+      isExpanded: !wasExpanded
+    };
+
+    // Animate the content with GSAP
+    this.animateAccordionContent(index, !wasExpanded);
+
+    // Add subtle haptic feedback for mobile devices
+    if ('vibrate' in navigator && !wasExpanded) {
+      navigator.vibrate(50);
+    }
+
+    // Trigger change detection for OnPush strategy
+    this.cdr.markForCheck();
+  }
+
+  // Animate accordion content with GSAP
+  private animateAccordionContent(index: number, isExpanding: boolean): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const timelineSteps = this.timelineContainer?.nativeElement?.querySelectorAll('.timeline-step');
+    if (!timelineSteps || !timelineSteps[index]) return;
+
+    const contentElement = timelineSteps[index].querySelector('.step-content') as HTMLElement;
+    if (!contentElement) return;
+
+    if (isExpanding) {
+      // Show the element first
+      contentElement.style.display = 'block';
+
+      // Get the natural height
+      const naturalHeight = contentElement.scrollHeight;
+
+      // Expanding animation
+      gsap.fromTo(contentElement,
+        {
+          height: 0,
+          opacity: 0,
+          y: -20,
+          force3D: true
+        },
+        {
+          height: naturalHeight,
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: 'power2.out',
+          force3D: true,
+          onComplete: () => {
+            // Set height to auto after animation for responsive behavior
+            contentElement.style.height = 'auto';
+          }
+        }
+      );
+    } else {
+      // Get current height before collapsing
+      const currentHeight = contentElement.offsetHeight;
+
+      // Collapsing animation
+      gsap.fromTo(contentElement,
+        {
+          height: currentHeight,
+          opacity: 1,
+          y: 0,
+          force3D: true
+        },
+        {
+          height: 0,
+          opacity: 0,
+          y: -20,
+          duration: 0.3,
+          ease: 'power2.in',
+          force3D: true,
+          onComplete: () => {
+            contentElement.style.display = 'none';
+          }
+        }
+      );
+    }
   }
 }
