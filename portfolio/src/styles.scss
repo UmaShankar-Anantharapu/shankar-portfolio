@@ -69,6 +69,38 @@ html, body {
   background: rgba(0, 0, 0, 0.6) !important;
 }
 
+/* Force all modal content to use theme colors */
+.project-detail-modal .mat-mdc-dialog-container,
+.custom-modal-panel .mat-mdc-dialog-container {
+  background: var(--primary-color) !important;
+
+  * {
+    background-color: transparent !important;
+  }
+
+  // Specific overrides for demo elements that need backgrounds
+  .kpi-card,
+  .device-card,
+  .camera-feed,
+  .stat-card,
+  .job-card,
+  .photo-placeholder,
+  .video-placeholder,
+  .chart-element,
+  .sphere-element,
+  .demo-placeholder,
+  .screenshot-placeholder,
+  .feature-item,
+  .challenge-item,
+  .achievement-item,
+  .booking-section,
+  .resume-preview,
+  .customer-table,
+  .gallery-grid {
+    background: rgba(255, 255, 255, 0.05) !important;
+  }
+}
+
 /* Enhanced Cube Tooltip with Premium Styling */
 #cube-tooltip {
   font-family: 'Inter', sans-serif;

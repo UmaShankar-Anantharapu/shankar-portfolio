@@ -45,7 +45,6 @@ export interface Project {
     <article
       #cardElement
       class="project-card"
-      [class]="gridSizeClass"
       [attr.data-project-id]="project.id"
       [attr.aria-label]="'Project: ' + project.title + ' at ' + project.company"
       (click)="onCardClick($event)">
@@ -78,36 +77,34 @@ export interface Project {
         <!-- Project Body -->
         <div class="project-body">
           <p class="project-description">{{ project.description }}</p>
-          
-          <div class="project-tech-info">
-            <div class="angular-version">
-              <span class="version-label">Built with:</span>
-              <span class="version-value">{{ project.angularVersion }}</span>
-            </div>
-            
-            <div class="technologies-preview">
-              <span class="tech-label">Technologies:</span>
-              <div class="tech-tags-preview">
-                <span 
-                  *ngFor="let tech of project.technologies.slice(0, 3); let i = index" 
-                  class="tech-tag-mini"
-                  [class.clickable-skill]="isRecognizedSkill(tech)"
-                  (click)="onTechClick(tech, $event)"
-                  [attr.title]="isRecognizedSkill(tech) ? 'Click to view skill details' : tech">
-                  {{ tech }}
-                </span>
-                <span
-                  *ngIf="project.technologies.length > 3"
-                  class="tech-more"
-                  (click)="onShowMoreTech($event)"
-                  role="button"
-                  tabindex="0"
-                  [attr.aria-label]="'Show ' + (project.technologies.length - 3) + ' more technologies'"
-                  (keydown.enter)="onShowMoreTech($event)"
-                  (keydown.space)="onShowMoreTech($event)">
-                  +{{ project.technologies.length - 3 }} more
-                </span>
-              </div>
+
+          <!-- Angular Version Badge -->
+          <div class="angular-version">{{ project.angularVersion }}</div>
+
+          <!-- Technologies Section -->
+          <div class="project-technologies">
+            <span class="tech-label">Technologies</span>
+            <div class="tech-tags">
+              <span
+                *ngFor="let tech of project.technologies.slice(0, 3); let i = index"
+                class="tech-tag-mini"
+                [class.clickable-skill]="isRecognizedSkill(tech)"
+                (click)="onTechClick(tech, $event)"
+                [attr.title]="isRecognizedSkill(tech) ? 'Click to view skill details' : tech">
+                {{ tech }}
+              </span>
+              <span
+                *ngIf="project.technologies.length > 3"
+                class="tech-more"
+                (click)="onShowMoreTech($event)"
+                role="button"
+                tabindex="0"
+                [attr.aria-label]="'Show ' + (project.technologies.length - 3) + ' more technologies'"
+                (keydown.enter)="onShowMoreTech($event)"
+                (keydown.space)="onShowMoreTech($event)"
+                title="Click to view all technologies">
+                +{{ project.technologies.length - 3 }} more →
+              </span>
             </div>
           </div>
         </div>
@@ -139,7 +136,7 @@ export interface Project {
 })
 export class ProjectCardComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() project!: Project;
-  @Input() gridSizeClass: string = '';
+  // No longer need gridSizeClass - all cards are uniform
 
   @Output() viewDetails = new EventEmitter<Project>();
   @Output() skillNavigation = new EventEmitter<string>();
@@ -202,17 +199,17 @@ export class ProjectCardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Handle card click - delegate to appropriate handler
+   * Handle card click - always open view details
    */
   onCardClick(event: Event): void {
-    // Prevent default card click if clicking on interactive elements
+    // Prevent default card click if clicking on interactive elements (except view-details-btn)
     const target = event.target as HTMLElement;
-    if (target.closest('.tech-tag-mini, .view-details-btn, .tech-more')) {
+    if (target.closest('.tech-tag-mini, .tech-more')) {
       return;
     }
 
-    // Emit card click event for parent component to handle
-    this.cardClick.emit(this.project);
+    // Always open view details for any card click
+    this.viewDetails.emit(this.project);
   }
 
   /**
@@ -246,8 +243,16 @@ export class ProjectCardComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   onShowMoreTech(event: Event): void {
     event.stopPropagation();
-    // Open the project modal to show all technologies
-    this.cardClick.emit(this.project);
+    event.preventDefault();
+
+    // Open the project modal to show all technologies in Technical tab
+    this.viewDetails.emit(this.project);
+
+    // Optional: Add a small delay and then switch to Technical tab
+    setTimeout(() => {
+      // This could be enhanced to communicate with the modal to switch to Technical tab
+      console.log('Opening project details with focus on technologies');
+    }, 100);
   }
 
   /**

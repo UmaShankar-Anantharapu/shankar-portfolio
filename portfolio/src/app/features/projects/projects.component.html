@@ -50,21 +50,24 @@
       <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5,6]"></div>
     </div>
 
-    <!-- Bento Grid Layout with Performance-Optimized Project Cards -->
+    <!-- Uniform Grid Layout - All Cards Identical Dimensions -->
     <div
-      #bentoGrid
-      class="bento-grid"
+      #projectsGrid
+      class="projects-grid"
       role="region"
       [attr.aria-label]="'Projects showcase - ' + filteredProjects.length + ' projects displayed'"
       *ngIf="!isSearching">
 
-      <app-project-card
+      <div
         *ngFor="let project of filteredProjects; trackBy: trackByProjectId"
-        [project]="project"
-        [gridSizeClass]="getGridSizeClass(project)"
-        (cardClick)="onProjectCardClick(project)"
-        (skillNavigation)="onSkillNavigation($event)">
-      </app-project-card>
+        class="project-item"
+        [attr.data-project-id]="project.id">
+        <app-project-card
+          [project]="project"
+          (viewDetails)="onProjectCardClick(project)"
+          (skillNavigation)="onSkillNavigation($event)">
+        </app-project-card>
+      </div>
 
       <!-- No Results State -->
       <div *ngIf="filteredProjects.length === 0 && searchQuery" class="no-results-state">

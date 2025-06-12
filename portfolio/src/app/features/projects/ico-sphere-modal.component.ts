@@ -111,9 +111,11 @@ import { takeUntil } from 'rxjs/operators';
   styles: [`
     .ico-sphere-modal-container {
       padding: 0;
-      max-width: 800px;
+      margin: 0;
+      max-width: 600px;
       width: 100%;
-      max-height: 90vh;
+      height: auto;
+      max-height: 80vh;
       overflow-y: auto;
     }
 
@@ -130,10 +132,10 @@ import { takeUntil } from 'rxjs/operators';
 
     .sphere-header {
       border-bottom: 1px solid rgba(38, 166, 154, 0.2);
-      padding: 1.5rem;
+      padding: 0.5rem 0.75rem;
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.75rem;
     }
 
     .sphere-avatar {
@@ -166,13 +168,13 @@ import { takeUntil } from 'rxjs/operators';
     }
 
     .sphere-content {
-      padding: 2rem 1.5rem;
+      padding: 0.5rem 0.75rem;
     }
 
     .sphere-preview-container {
       position: relative;
-      margin-bottom: 2rem;
-      border-radius: 12px;
+      margin-bottom: 0.5rem;
+      border-radius: 8px;
       overflow: hidden;
       background: rgba(0, 0, 0, 0.1);
       border: 1px solid rgba(38, 166, 154, 0.2);
@@ -180,7 +182,7 @@ import { takeUntil } from 'rxjs/operators';
 
     .sphere-preview-large {
       width: 100%;
-      height: 400px;
+      height: 250px;
       position: relative;
     }
 
@@ -214,32 +216,32 @@ import { takeUntil } from 'rxjs/operators';
 
     .project-info {
       background: rgba(255, 255, 255, 0.03);
-      border-radius: 12px;
-      padding: 1.5rem;
+      border-radius: 8px;
+      padding: 0.5rem;
       border: 1px solid rgba(38, 166, 154, 0.1);
     }
 
     .info-title {
       font-family: 'Orbitron', sans-serif;
       color: var(--secondary-color);
-      margin-bottom: 1rem;
-      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
     }
 
     .info-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
     }
 
     .info-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.75rem;
+      padding: 0.5rem;
       background: rgba(38, 166, 154, 0.05);
-      border-radius: 8px;
+      border-radius: 6px;
       border: 1px solid rgba(38, 166, 154, 0.1);
     }
 
@@ -256,7 +258,7 @@ import { takeUntil } from 'rxjs/operators';
     }
 
     .tech-highlights {
-      margin-top: 1.5rem;
+      margin-top: 0.5rem;
     }
 
     .highlights-title {
@@ -289,10 +291,10 @@ import { takeUntil } from 'rxjs/operators';
     }
 
     .sphere-actions {
-      padding: 1rem 1.5rem;
+      padding: 0.5rem 0.75rem;
       border-top: 1px solid rgba(38, 166, 154, 0.2);
       display: flex;
-      gap: 1rem;
+      gap: 0.5rem;
       flex-wrap: wrap;
     }
 
@@ -346,18 +348,34 @@ import { takeUntil } from 'rxjs/operators';
     @media (max-width: 768px) {
       .ico-sphere-modal-container {
         max-width: 95vw;
+        max-height: 90vh;
       }
-      
+
       .sphere-preview-large {
-        height: 300px;
+        height: 250px;
       }
-      
+
       .info-grid {
         grid-template-columns: 1fr;
+        gap: 0.5rem;
       }
-      
+
       .sphere-actions {
         flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.5rem;
+      }
+
+      .sphere-header {
+        padding: 0.75rem;
+      }
+
+      .sphere-content {
+        padding: 0.75rem;
+      }
+
+      .project-info {
+        padding: 0.75rem;
       }
     }
   `],

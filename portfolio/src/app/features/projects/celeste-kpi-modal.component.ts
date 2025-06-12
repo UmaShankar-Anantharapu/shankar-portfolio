@@ -76,22 +76,30 @@ import * as Highcharts from 'highcharts';
   styles: [`
     .kpi-modal-container {
       padding: 0;
-      max-width: 600px;
+      margin: 0;
+      max-width: 450px;
       width: 100%;
+      height: auto;
+      max-height: 75vh;
+      display: flex;
+      flex-direction: column;
     }
 
     .kpi-card {
       background: var(--primary-color);
       color: var(--text-color);
       border: 1px solid rgba(38, 166, 154, 0.2);
-      box-shadow: 
+      box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.3),
         0 0 0 1px rgba(38, 166, 154, 0.1);
+      display: flex;
+      flex-direction: column;
     }
 
     .kpi-header {
       border-bottom: 1px solid rgba(38, 166, 154, 0.2);
-      padding-bottom: 1rem;
+      padding: 0.5rem 0.75rem 0.25rem 0.75rem;
+      flex-shrink: 0;
     }
 
     .kpi-avatar {
@@ -119,23 +127,25 @@ import * as Highcharts from 'highcharts';
     }
 
     .kpi-content {
-      padding: 2rem 1.5rem;
+      padding: 0.5rem 0.75rem;
+      display: flex;
+      flex-direction: column;
     }
 
     .main-kpi {
       text-align: center;
-      margin-bottom: 2rem;
-      padding: 1.5rem;
+      margin-bottom: 0.5rem;
+      padding: 0.5rem;
       background: rgba(38, 166, 154, 0.05);
-      border-radius: 12px;
+      border-radius: 8px;
       border: 1px solid rgba(38, 166, 154, 0.1);
     }
 
     .kpi-label {
       font-family: 'Inter', sans-serif;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       color: var(--text-color-secondary);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -145,12 +155,12 @@ import * as Highcharts from 'highcharts';
       align-items: baseline;
       justify-content: center;
       gap: 0.5rem;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem;
     }
 
     .kpi-number {
       font-family: 'Orbitron', sans-serif;
-      font-size: 3rem;
+      font-size: 1.8rem;
       font-weight: 700;
       color: var(--secondary-color);
       line-height: 1;
@@ -186,77 +196,112 @@ import * as Highcharts from 'highcharts';
     }
 
     .chart-container {
-      margin-bottom: 2rem;
+      margin-bottom: 0.5rem;
     }
 
     .chart-title {
       font-family: 'Inter', sans-serif;
-      font-size: 1.1rem;
+      font-size: 0.8rem;
       color: var(--text-color);
-      margin-bottom: 1rem;
+      margin-bottom: 0.25rem;
       text-align: center;
     }
 
     .chart-element {
-      height: 250px;
+      height: 140px;
       width: 100%;
     }
 
     .additional-kpis {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
+      gap: 0.25rem;
+      margin-bottom: 0.25rem;
     }
 
     .kpi-item {
       text-align: center;
-      padding: 1rem;
+      padding: 0.25rem;
       background: rgba(255, 255, 255, 0.03);
-      border-radius: 8px;
+      border-radius: 6px;
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .kpi-item-label {
       font-family: 'Inter', sans-serif;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       color: var(--text-color-secondary);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
     }
 
     .kpi-item-value {
       font-family: 'Orbitron', sans-serif;
-      font-size: 1.2rem;
+      font-size: 1rem;
       font-weight: 600;
       color: var(--secondary-color);
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.1rem;
     }
 
     .kpi-item-percentage {
       font-family: 'Inter', sans-serif;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       color: var(--text-color-secondary);
     }
 
     .kpi-actions {
-      padding: 1rem 1.5rem;
+      padding: 0.25rem 0.75rem;
       border-top: 1px solid rgba(38, 166, 154, 0.2);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 0.25rem;
     }
 
     @media (max-width: 768px) {
+      .kpi-modal-container {
+        max-width: 95vw;
+        max-height: 85vh;
+      }
+
       .additional-kpis {
         grid-template-columns: 1fr;
+        gap: 0.2rem;
       }
-      
+
       .kpi-number {
-        font-size: 2.5rem;
+        font-size: 1.4rem;
       }
-      
+
+      .chart-element {
+        height: 120px;
+      }
+
       .kpi-actions {
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.2rem;
+        padding: 0.25rem 0.5rem;
+      }
+
+      .kpi-content {
+        padding: 0.25rem 0.5rem;
+      }
+
+      .main-kpi {
+        padding: 0.25rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .kpi-header {
+        padding: 0.25rem 0.5rem;
+      }
+
+      .kpi-item {
+        padding: 0.2rem;
+      }
+
+      .chart-title {
+        font-size: 0.7rem;
+        margin-bottom: 0.2rem;
       }
     }
   `],
@@ -297,7 +342,7 @@ export class CelesteKpiModalComponent implements OnInit, AfterViewInit, OnDestro
       chart: {
         type: 'pie',
         backgroundColor: 'transparent',
-        height: 250
+        height: 140
       },
       title: {
         text: undefined

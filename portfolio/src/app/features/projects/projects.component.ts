@@ -25,7 +25,7 @@ gsap.registerPlugin(ScrollTrigger);
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('bentoGrid', { static: false }) bentoGrid!: ElementRef;
+  @ViewChild('projectsGrid', { static: false }) projectsGrid!: ElementRef;
   @ViewChild('celesteLottie', { static: false }) celesteLottie!: ElementRef;
   @ViewChild('searchInput', { static: false }) searchInput!: ElementRef;
 
@@ -241,19 +241,7 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     return project.id;
   }
 
-  // Get grid size class for Bento layout
-  getGridSizeClass(project: Project): string {
-    switch (project.size) {
-      case 'large':
-        return 'col-span-2 row-span-2';
-      case 'medium':
-        return 'col-span-2 row-span-1';
-      case 'small':
-        return 'col-span-1 row-span-1';
-      default:
-        return 'col-span-1 row-span-1';
-    }
-  }
+  // All cards now have uniform dimensions - no size classes needed
 
   // Get total projects count
   getTotalProjectsCount(): number {
@@ -305,9 +293,9 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Animate search results
   private animateSearchResults(): void {
-    if (!this.bentoGrid?.nativeElement) return;
+    if (!this.projectsGrid?.nativeElement) return;
 
-    const projectCards = this.bentoGrid.nativeElement.querySelectorAll('.project-card');
+    const projectCards = this.projectsGrid.nativeElement.querySelectorAll('.project-card');
 
     // Fade out and then fade in with stagger
     gsap.to(projectCards, {
@@ -318,7 +306,7 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
       onComplete: () => {
         // Wait for Angular to update the DOM
         setTimeout(() => {
-          const newCards = this.bentoGrid.nativeElement.querySelectorAll('.project-card');
+          const newCards = this.projectsGrid.nativeElement.querySelectorAll('.project-card');
           gsap.fromTo(newCards,
             {
               opacity: 0,
@@ -396,9 +384,9 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Highlight projects that contain the specified skill
   private highlightProjectsWithSkill(skillName: string): void {
-    if (!this.bentoGrid?.nativeElement) return;
+    if (!this.projectsGrid?.nativeElement) return;
 
-    const projectCards = this.bentoGrid.nativeElement.querySelectorAll('.project-card');
+    const projectCards = this.projectsGrid.nativeElement.querySelectorAll('.project-card');
 
     projectCards.forEach((card: HTMLElement) => {
       const projectId = card.getAttribute('data-project-id');
@@ -434,9 +422,9 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Initialize GSAP ScrollTrigger animations
   private initScrollTriggerAnimations(): void {
-    if (!this.bentoGrid?.nativeElement) return;
+    if (!this.projectsGrid?.nativeElement) return;
 
-    const projectCards = this.bentoGrid.nativeElement.querySelectorAll('.project-card');
+    const projectCards = this.projectsGrid.nativeElement.querySelectorAll('.project-card');
 
     if (projectCards.length > 0) {
       // Set initial state for cards
@@ -449,7 +437,7 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
       // Create staggered animation on scroll
       const scrollTrigger = ScrollTrigger.create({
-        trigger: this.bentoGrid.nativeElement,
+        trigger: this.projectsGrid.nativeElement,
         start: 'top 80%',
         end: 'bottom 20%',
         toggleActions: 'play none none reverse',
@@ -505,9 +493,9 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Initialize hover effects for project cards
   private initHoverEffects(): void {
-    if (!this.bentoGrid?.nativeElement) return;
+    if (!this.projectsGrid?.nativeElement) return;
 
-    const projectCards = this.bentoGrid.nativeElement.querySelectorAll('.project-card');
+    const projectCards = this.projectsGrid.nativeElement.querySelectorAll('.project-card');
 
     projectCards.forEach((card: HTMLElement) => {
       // Mouse enter effect
@@ -562,7 +550,7 @@ export class ProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     // Add hover effects for Celeste card
-    const celesteCard = this.bentoGrid?.nativeElement?.querySelector('[data-project-id="celeste"]');
+    const celesteCard = this.projectsGrid?.nativeElement?.querySelector('[data-project-id="celeste"]');
     if (celesteCard) {
       celesteCard.addEventListener('mouseenter', () => {
         this.lottieAnimation?.play();
