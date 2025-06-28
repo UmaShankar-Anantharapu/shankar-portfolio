@@ -10,7 +10,14 @@
       <a routerLink="/projects" class="nav-link" routerLinkActive="active">Projects</a>
       <a routerLink="/skills" class="nav-link" routerLinkActive="active">Skills</a>
       <a routerLink="/contact" class="nav-link" routerLinkActive="active">Contact</a>
-      <button class="hire-me-btn" (click)="scrollToContact()">Hire Me</button>
+      <a href="/assets/uma-shankar-resume.pdf" download="Uma-Shankar-Resume.pdf" class="download-resume-btn">
+        <svg class="download-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Resume
+      </a>
       <button
         class="theme-toggle-btn"
         [attr.data-theme]="currentTheme"
